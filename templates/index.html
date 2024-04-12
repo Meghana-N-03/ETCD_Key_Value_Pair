@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETCD Operations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #666;
+        }
+
+        form {
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+        }
+
+        #messages {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            border-radius: 5px;
+            color: #3c763d;
+        }
+
+        #showKeysBtn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #showKeysBtn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>ETCD Operations</h1>
+    
+    <h2>List of Keys:</h2>
+    <ul id="keyList">
+        {% for key in keys %}
+            <li>{{ key }}</li>
+        {% endfor %}
+    </ul>
+    
+
+    <h2>Get Value for Key:</h2>
+    <form id="getForm" action="/get" method="post">
+        <input type="text" name="key" placeholder="Enter key">
+        <input type="submit" value="Get Value">
+    </form>
+
+    <h2>Put Key-Value Pair:</h2>
+    <form id="putForm" action="/put" method="post">
+        <input type="text" name="key" placeholder="Enter key">
+        <input type="text" name="value" placeholder="Enter value">
+        <input type="submit" value="Put Key-Value">
+    </form>
+
+    <h2>Delete Key:</h2>
+    <form id="deleteForm" action="/delete" method="post">
+        <input type="text" name="key" placeholder="Enter key">
+        <input type="submit" value="Delete Key">
+    </form>
+
+    <div id="messages"></div>
+
+    <script>
+        function updateMessages(message) {
+            var messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML = message;
+        }
+    
+        document.getElementById("getForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => updateMessages(data.message))
+            .catch(error => console.error('Error:', error));
+        });
+    
+        document.getElementById("putForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => updateMessages(data.message))
+            .catch(error => console.error('Error:', error));
+        });
+    
+        document.getElementById("deleteForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => updateMessages(data.message))
+            .catch(error => console.error('Error:', error));
+        });
+
+    </script>
+</body>
+</html>
